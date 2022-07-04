@@ -1,0 +1,6 @@
+main_activity_inject = "java/MainActivity.java"
+java_files = [
+    "java/quadbt/QuadBT.java",
+    "java/quadbt/BluetoothLeService.java"
+]
+java_services = [ "quadbt.BluetoothLeService" ]
