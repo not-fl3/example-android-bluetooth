@@ -18,8 +18,8 @@ import java.util.List;
 import TARGET_PACKAGE_NAME.MainActivity;
 
 public class QuadBT  {
-    private BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-    private BluetoothLeScanner bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
+    public static BluetoothAdapter bluetoothAdapter;
+    public static BluetoothLeScanner bluetoothLeScanner;
     private static BluetoothLeService bluetoothService;
 
     native static void onServiceConnected();
@@ -58,14 +58,11 @@ public class QuadBT  {
     }
 
     public boolean isEnabled() {
-        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
-        return bluetoothAdapter.isEnabled();
+        return this.bluetoothAdapter.isEnabled();
     }
 
     public void startScan() {
-        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
+        bluetoothLeScanner = this.bluetoothAdapter.getBluetoothLeScanner();
         bluetoothLeScanner.startScan(leScanCallback);
     }
 

@@ -6,6 +6,7 @@ import android.content.IntentFilter;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ServiceConnection;
+import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.os.IBinder;
@@ -50,7 +51,12 @@ private boolean checkPermissions() {
 }
 
 private void bindBluetoothService() {
-    BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+    BluetoothManager bluetoothManager = (BluetoothManager)this.getSystemService(Context.BLUETOOTH_SERVICE);
+    BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
+
+    QuadBT.bluetoothAdapter = bluetoothAdapter;
+    QuadBT.bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
+
     if (!bluetoothAdapter.isEnabled()) {
         Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
         startActivityForResult(enableBtIntent, 2);

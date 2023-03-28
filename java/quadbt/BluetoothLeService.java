@@ -232,9 +232,20 @@ public class BluetoothLeService extends Service {
     }
     
     public void writeCharacteristic(BluetoothGattCharacteristic characteristic, String data) {
+        writen = false;
+
         characteristic.setValue(data);
         mBluetoothGatt.writeCharacteristic(characteristic);
 
+        try {
+            synchronized (mLock) {
+                while (!writen) {
+                    mLock.wait();
+                }
+            }
+        } catch (final InterruptedException e) {
+            Log.e("SAPP", "setCharacterIndication: can't wait for the descriptor valye " + e);
+        }
     }
 
     public void writeCharacteristic(BluetoothGattCharacteristic characteristic, byte[] data, boolean verify) {
@@ -247,16 +258,15 @@ public class BluetoothLeService extends Service {
         characteristic.setValue(data);
         mBluetoothGatt.writeCharacteristic(characteristic);
 
-            try {
-                synchronized (mLock) {
-                    while (!writen) {
-                        mLock.wait();
-                    }
+        try {
+            synchronized (mLock) {
+                while (!writen) {
+                    mLock.wait();
                 }
-            } catch (final InterruptedException e) {
-                Log.e("SAPP", "setCharacterIndication: can't wait for the descriptor valye " + e);
             }
-
+        } catch (final InterruptedException e) {
+            Log.e("SAPP", "setCharacterIndication: can't wait for the descriptor valye " + e);
+        }
     }
 
     public void readCharacteristic(BluetoothGattCharacteristic characteristic) {
